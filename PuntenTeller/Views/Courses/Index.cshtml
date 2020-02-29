@@ -16,6 +16,15 @@
                 @Html.DisplayNameFor(model => model.name)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.teacher)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.cohort)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.subject)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.period)
             </th>
             <th>
@@ -29,6 +38,15 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.teacher.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.cohort.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.subject.name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.period)

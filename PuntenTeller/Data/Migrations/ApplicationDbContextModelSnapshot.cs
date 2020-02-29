@@ -219,6 +219,21 @@ namespace PuntenTeller.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("PuntenTeller.Models.Category", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("PuntenTeller.Models.Cohort", b =>
                 {
                     b.Property<int>("id")
@@ -241,7 +256,7 @@ namespace PuntenTeller.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("cohortid")
+                    b.Property<int>("cohortID")
                         .HasColumnType("int");
 
                     b.Property<string>("name")
@@ -250,16 +265,41 @@ namespace PuntenTeller.Data.Migrations
                     b.Property<int>("period")
                         .HasColumnType("int");
 
-                    b.Property<int?>("teacherid")
+                    b.Property<int>("subjectID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("teacherID")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
-                    b.HasIndex("cohortid");
+                    b.HasIndex("cohortID");
 
-                    b.HasIndex("teacherid");
+                    b.HasIndex("subjectID");
+
+                    b.HasIndex("teacherID");
 
                     b.ToTable("Course");
+                });
+
+            modelBuilder.Entity("PuntenTeller.Models.Subject", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("categoryID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("categoryID");
+
+                    b.ToTable("Subject");
                 });
 
             modelBuilder.Entity("PuntenTeller.Models.Teacher", b =>
@@ -335,11 +375,30 @@ namespace PuntenTeller.Data.Migrations
                 {
                     b.HasOne("PuntenTeller.Models.Cohort", "cohort")
                         .WithMany()
-                        .HasForeignKey("cohortid");
+                        .HasForeignKey("cohortID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PuntenTeller.Models.Subject", "subject")
+                        .WithMany()
+                        .HasForeignKey("subjectID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PuntenTeller.Models.Teacher", "teacher")
                         .WithMany()
-                        .HasForeignKey("teacherid");
+                        .HasForeignKey("teacherID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PuntenTeller.Models.Subject", b =>
+                {
+                    b.HasOne("PuntenTeller.Models.Category", "category")
+                        .WithMany()
+                        .HasForeignKey("categoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

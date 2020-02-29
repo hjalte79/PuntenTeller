@@ -5,6 +5,13 @@
     <UserSecretsId>aspnet-PuntenTeller-EDFB2A77-153C-4DA9-8B7F-5E78A027F2E1</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20200222225154_Course.cs" />
+    <Compile Remove="Data\Migrations\20200222225154_Course.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200228210538_Category.cs" />
+    <Compile Remove="Data\Migrations\20200228210538_Category.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.1" />
