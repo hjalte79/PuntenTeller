@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PuntenTeller.Models.Course>
+﻿@model IEnumerable<PuntenTeller.Models.Subject>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,16 +16,7 @@
                 @Html.DisplayNameFor(model => model.name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.teacher)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.cohort)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.subject)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.period)
+                @Html.DisplayNameFor(model => model.category)
             </th>
             <th></th>
         </tr>
@@ -37,16 +28,7 @@
                 @Html.DisplayFor(modelItem => item.name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.teacher.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.cohort.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.subject.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.period)
+                @Html.DisplayFor(modelItem => item.category.id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |

@@ -14,7 +14,9 @@ namespace PuntenTeller.Data
         {
         }
         public DbSet<Teacher> Teacher { get; set; }
-        public DbSet<PuntenTeller.Models.Cohort> Cohort { get; set; }
-        public DbSet<PuntenTeller.Models.Course> Course { get; set; }
+        public DbSet<Cohort> Cohort { get; set; }
+        public DbSet<Category> category { get; set; }
+        public DbSet<Subject> Subject { get; set; }
+        public DbSet<Course> Course { get; set; }
     }
 }

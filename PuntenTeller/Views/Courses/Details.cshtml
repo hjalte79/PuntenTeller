@@ -17,6 +17,24 @@
             @Html.DisplayFor(model => model.name)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.teacher)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.teacher.id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.cohort)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.cohort.id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.subject)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.subject.id)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.period)
         </dt>
         <dd class = "col-sm-10">

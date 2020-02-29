@@ -10,23 +10,23 @@ using PuntenTeller.Models;
 
 namespace PuntenTeller.Controllers
 {
-    public class CoursesController : Controller
+    public class SubjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CoursesController(ApplicationDbContext context)
+        public SubjectsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Courses
+        // GET: Subjects
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Course.Include(c => c.cohort).Include(c => c.subject).Include(c => c.teacher);
+            var applicationDbContext = _context.Subject.Include(s => s.category);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Courses/Details/5
+        // GET: Subjects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,48 +34,42 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var course = await _context.Course
-                .Include(c => c.cohort)
-                .Include(c => c.subject)
-                .Include(c => c.teacher)
+            var subject = await _context.Subject
+                .Include(s => s.category)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (course == null)
+            if (subject == null)
             {
                 return NotFound();
             }
 
-            return View(course);
+            return View(subject);
         }
 
-        // GET: Courses/Create
+        // GET: Subjects/Create
         public IActionResult Create()
         {
-            ViewData["cohortID"] = new SelectList(_context.Cohort, "id", "name");
-            ViewData["subjectID"] = new SelectList(_context.Set<Subject>(), "id", "name");
-            ViewData["teacherID"] = new SelectList(_context.Teacher, "id", "name");
+            ViewData["categoryID"] = new SelectList(_context.category, "id", "id");
             return View();
         }
 
-        // POST: Courses/Create
+        // POST: Subjects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,teacherID,cohortID,subjectID,period")] Course course)
+        public async Task<IActionResult> Create([Bind("id,name,categoryID")] Subject subject)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(course);
+                _context.Add(subject);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["cohortID"] = new SelectList(_context.Cohort, "id", "name", course.cohortID);
-            ViewData["subjectID"] = new SelectList(_context.Set<Subject>(), "id", "name", course.subjectID);
-            ViewData["teacherID"] = new SelectList(_context.Teacher, "id", "name", course.teacherID);
-            return View(course);
+            ViewData["categoryID"] = new SelectList(_context.category, "id", "id", subject.categoryID);
+            return View(subject);
         }
 
-        // GET: Courses/Edit/5
+        // GET: Subjects/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,25 +77,23 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var course = await _context.Course.FindAsync(id);
-            if (course == null)
+            var subject = await _context.Subject.FindAsync(id);
+            if (subject == null)
             {
                 return NotFound();
             }
-            ViewData["cohortID"] = new SelectList(_context.Cohort, "id", "name", course.cohortID);
-            ViewData["subjectID"] = new SelectList(_context.Set<Subject>(), "id", "name", course.subjectID);
-            ViewData["teacherID"] = new SelectList(_context.Teacher, "id", "name", course.teacherID);
-            return View(course);
+            ViewData["categoryID"] = new SelectList(_context.category, "id", "id", subject.categoryID);
+            return View(subject);
         }
 
-        // POST: Courses/Edit/5
+        // POST: Subjects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,teacherID,cohortID,subjectID,period")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,categoryID")] Subject subject)
         {
-            if (id != course.id)
+            if (id != subject.id)
             {
                 return NotFound();
             }
@@ -110,12 +102,12 @@ namespace PuntenTeller.Controllers
             {
                 try
                 {
-                    _context.Update(course);
+                    _context.Update(subject);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CourseExists(course.id))
+                    if (!SubjectExists(subject.id))
                     {
                         return NotFound();
                     }
@@ -126,13 +118,11 @@ namespace PuntenTeller.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["cohortID"] = new SelectList(_context.Cohort, "id", "name", course.cohortID);
-            ViewData["subjectID"] = new SelectList(_context.Set<Subject>(), "id", "name", course.subjectID);
-            ViewData["teacherID"] = new SelectList(_context.Teacher, "id", "name", course.teacherID);
-            return View(course);
+            ViewData["categoryID"] = new SelectList(_context.category, "id", "id", subject.categoryID);
+            return View(subject);
         }
 
-        // GET: Courses/Delete/5
+        // GET: Subjects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,33 +130,31 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var course = await _context.Course
-                .Include(c => c.cohort)
-                .Include(c => c.subject)
-                .Include(c => c.teacher)
+            var subject = await _context.Subject
+                .Include(s => s.category)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (course == null)
+            if (subject == null)
             {
                 return NotFound();
             }
 
-            return View(course);
+            return View(subject);
         }
 
-        // POST: Courses/Delete/5
+        // POST: Subjects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var course = await _context.Course.FindAsync(id);
-            _context.Course.Remove(course);
+            var subject = await _context.Subject.FindAsync(id);
+            _context.Subject.Remove(subject);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CourseExists(int id)
+        private bool SubjectExists(int id)
         {
-            return _context.Course.Any(e => e.id == id);
+            return _context.Subject.Any(e => e.id == id);
         }
     }
 }
