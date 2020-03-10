@@ -6,26 +6,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PuntenTeller.Data;
+using PuntenTeller.Helpers;
 using PuntenTeller.Models;
 
 namespace PuntenTeller.Controllers
 {
-    public class CategoriesController : Controller
+    public class StudentsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CategoriesController(ApplicationDbContext context)
+        public StudentsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Categories
+        // GET: Students
         public async Task<IActionResult> Index()
         {
-            return View(await _context.category.ToListAsync());
+            var applicationDbContext = _context.Student.Include(s => s.schoolClass);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Categories/Details/5
+        // GET: Students/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,41 +35,39 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category
-                .Include(s =>s.subjects)
-                .FirstOrDefaultAsync(m => m.id == id);
-            
-            if (category == null)
-            {
-                return NotFound();
-            }
+            Rapport rapport = new Rapport(_context);
+            await rapport.getData((int)id);
+            ViewBag.rapport = rapport;
 
-            return View(category);
+
+            return View(rapport.student);
         }
 
-        // GET: Categories/Create
+        // GET: Students/Create
         public IActionResult Create()
         {
+            ViewData["schoolClassID"] = new SelectList(_context.SchoolClass, "id", "name");
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Students/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name")] Category category)
+        public async Task<IActionResult> Create([Bind("id,name,lastName,schoolClassID")] Student student)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                _context.Add(student);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            ViewData["schoolClassID"] = new SelectList(_context.SchoolClass, "id", "name", student.schoolClassID);
+            return View(student);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Students/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,22 +75,23 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category.FindAsync(id);
-            if (category == null)
+            var student = await _context.Student.FindAsync(id);
+            if (student == null)
             {
                 return NotFound();
             }
-            return View(category);
+            ViewData["schoolClassID"] = new SelectList(_context.SchoolClass, "id", "name", student.schoolClassID);
+            return View(student);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Students/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,lastName,schoolClassID")] Student student)
         {
-            if (id != category.id)
+            if (id != student.id)
             {
                 return NotFound();
             }
@@ -99,12 +100,12 @@ namespace PuntenTeller.Controllers
             {
                 try
                 {
-                    _context.Update(category);
+                    _context.Update(student);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.id))
+                    if (!StudentExists(student.id))
                     {
                         return NotFound();
                     }
@@ -115,10 +116,11 @@ namespace PuntenTeller.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            ViewData["schoolClassID"] = new SelectList(_context.SchoolClass, "id", "name", student.schoolClassID);
+            return View(student);
         }
 
-        // GET: Categories/Delete/5
+        // GET: Students/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,30 +128,31 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category
+            var student = await _context.Student
+                .Include(s => s.schoolClass)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (category == null)
+            if (student == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(student);
         }
 
-        // POST: Categories/Delete/5
+        // POST: Students/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.category.FindAsync(id);
-            _context.category.Remove(category);
+            var student = await _context.Student.FindAsync(id);
+            _context.Student.Remove(student);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private bool StudentExists(int id)
         {
-            return _context.category.Any(e => e.id == id);
+            return _context.Student.Any(e => e.id == id);
         }
     }
 }

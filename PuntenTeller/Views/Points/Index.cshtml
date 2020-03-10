@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PuntenTeller.Models.Course>
+﻿@model IEnumerable<PuntenTeller.Models.Point>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,19 +13,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.name)
+                @Html.DisplayNameFor(model => model.value)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.teacher)
+                @Html.DisplayNameFor(model => model.resit)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.cohort)
+                @Html.DisplayNameFor(model => model.student)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.subject)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.period)
+                @Html.DisplayNameFor(model => model.exam)
             </th>
             <th></th>
         </tr>
@@ -34,19 +31,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.name)
+                @Html.DisplayFor(modelItem => item.value)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.teacher.name)
+                @Html.DisplayFor(modelItem => item.resit)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.cohort.name)
+                @Html.DisplayFor(modelItem => item.student.lastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.subject.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.period)
+                @Html.DisplayFor(modelItem => item.exam.name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |

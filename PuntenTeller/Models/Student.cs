@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
 
 namespace PuntenTeller.Models
 {
-    public class Teacher
+    public class Student
     {
         public int id { get; set; }
         [Required]
@@ -14,11 +14,20 @@ namespace PuntenTeller.Models
         [Required]
         public string lastName { get; set; }
 
+        ///// navigation properties /////
+        // knows
+        [Display(Name = "Class")]
+        public int schoolClassID { get; set; }
+        public SchoolClass schoolClass { get; set; }
+
+        // known by
+        public ICollection<Point> points { get; set; }
+
         public string fullName
         {
             get
             {
-                return string.Format("{0} {1}", name, lastName);
+                return $"{name} {lastName}";
             }
         }
     }

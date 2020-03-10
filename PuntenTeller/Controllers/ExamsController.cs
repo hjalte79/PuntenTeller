@@ -10,22 +10,23 @@ using PuntenTeller.Models;
 
 namespace PuntenTeller.Controllers
 {
-    public class CategoriesController : Controller
+    public class ExamsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CategoriesController(ApplicationDbContext context)
+        public ExamsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Categories
+        // GET: Exams
         public async Task<IActionResult> Index()
         {
-            return View(await _context.category.ToListAsync());
+            var applicationDbContext = _context.Exam.Include(e => e.course);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Categories/Details/5
+        // GET: Exams/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,41 +34,42 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category
-                .Include(s =>s.subjects)
+            var exam = await _context.Exam
+                .Include(e => e.course)
                 .FirstOrDefaultAsync(m => m.id == id);
-            
-            if (category == null)
+            if (exam == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(exam);
         }
 
-        // GET: Categories/Create
+        // GET: Exams/Create
         public IActionResult Create()
         {
+            ViewData["courseID"] = new SelectList(_context.Course, "id", "name");
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Exams/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name")] Category category)
+        public async Task<IActionResult> Create([Bind("id,name,courseID")] Exam exam)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                _context.Add(exam);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            ViewData["courseID"] = new SelectList(_context.Course, "id", "name", exam.courseID);
+            return View(exam);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Exams/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,22 +77,23 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category.FindAsync(id);
-            if (category == null)
+            var exam = await _context.Exam.FindAsync(id);
+            if (exam == null)
             {
                 return NotFound();
             }
-            return View(category);
+            ViewData["courseID"] = new SelectList(_context.Course, "id", "name", exam.courseID);
+            return View(exam);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Exams/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,courseID")] Exam exam)
         {
-            if (id != category.id)
+            if (id != exam.id)
             {
                 return NotFound();
             }
@@ -99,12 +102,12 @@ namespace PuntenTeller.Controllers
             {
                 try
                 {
-                    _context.Update(category);
+                    _context.Update(exam);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.id))
+                    if (!ExamExists(exam.id))
                     {
                         return NotFound();
                     }
@@ -115,10 +118,11 @@ namespace PuntenTeller.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            ViewData["courseID"] = new SelectList(_context.Course, "id", "name", exam.courseID);
+            return View(exam);
         }
 
-        // GET: Categories/Delete/5
+        // GET: Exams/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,30 +130,31 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category
+            var exam = await _context.Exam
+                .Include(e => e.course)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (category == null)
+            if (exam == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(exam);
         }
 
-        // POST: Categories/Delete/5
+        // POST: Exams/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.category.FindAsync(id);
-            _context.category.Remove(category);
+            var exam = await _context.Exam.FindAsync(id);
+            _context.Exam.Remove(exam);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private bool ExamExists(int id)
         {
-            return _context.category.Any(e => e.id == id);
+            return _context.Exam.Any(e => e.id == id);
         }
     }
 }

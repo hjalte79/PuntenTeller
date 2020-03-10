@@ -10,8 +10,8 @@ using PuntenTeller.Data;
 namespace PuntenTeller.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200228214103_cource")]
-    partial class cource
+    [Migration("20200301203033_cources")]
+    partial class cources
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -233,7 +233,7 @@ namespace PuntenTeller.Data.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Category");
+                    b.ToTable("category");
                 });
 
             modelBuilder.Entity("PuntenTeller.Models.Cohort", b =>
@@ -397,7 +397,7 @@ namespace PuntenTeller.Data.Migrations
             modelBuilder.Entity("PuntenTeller.Models.Subject", b =>
                 {
                     b.HasOne("PuntenTeller.Models.Category", "category")
-                        .WithMany()
+                        .WithMany("subjects")
                         .HasForeignKey("categoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

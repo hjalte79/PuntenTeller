@@ -18,5 +18,10 @@ namespace PuntenTeller.Data
         public DbSet<Category> category { get; set; }
         public DbSet<Subject> Subject { get; set; }
         public DbSet<Course> Course { get; set; }
+        public DbSet<Student> Student { get; set; }
+        public DbSet<SchoolClass> SchoolClass { get; set; }
+        public DbSet<ClassCourse> ClassCourse { get; set; }
+        public DbSet<Exam> Exam { get; set; }
+        public DbSet<Point> Point { get; set; }
     }
 }

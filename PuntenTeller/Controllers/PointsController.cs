@@ -10,22 +10,23 @@ using PuntenTeller.Models;
 
 namespace PuntenTeller.Controllers
 {
-    public class CategoriesController : Controller
+    public class PointsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CategoriesController(ApplicationDbContext context)
+        public PointsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Categories
+        // GET: Points
         public async Task<IActionResult> Index()
         {
-            return View(await _context.category.ToListAsync());
+            var applicationDbContext = _context.Point.Include(p => p.exam).Include(p => p.student);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Categories/Details/5
+        // GET: Points/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,41 +34,45 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category
-                .Include(s =>s.subjects)
+            var point = await _context.Point
+                .Include(p => p.exam)
+                .Include(p => p.student)
                 .FirstOrDefaultAsync(m => m.id == id);
-            
-            if (category == null)
+            if (point == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(point);
         }
 
-        // GET: Categories/Create
+        // GET: Points/Create
         public IActionResult Create()
         {
+            ViewData["examID"] = new SelectList(_context.Exam, "id", "name");
+            ViewData["studentID"] = new SelectList(_context.Student, "id", "lastName");
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Points/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name")] Category category)
+        public async Task<IActionResult> Create([Bind("id,value,resit,studentID,examID")] Point point)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                _context.Add(point);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            ViewData["examID"] = new SelectList(_context.Exam, "id", "name", point.examID);
+            ViewData["studentID"] = new SelectList(_context.Student, "id", "lastName", point.studentID);
+            return View(point);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Points/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,22 +80,24 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category.FindAsync(id);
-            if (category == null)
+            var point = await _context.Point.FindAsync(id);
+            if (point == null)
             {
                 return NotFound();
             }
-            return View(category);
+            ViewData["examID"] = new SelectList(_context.Exam, "id", "name", point.examID);
+            ViewData["studentID"] = new SelectList(_context.Student, "id", "lastName", point.studentID);
+            return View(point);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Points/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("id,value,resit,studentID,examID")] Point point)
         {
-            if (id != category.id)
+            if (id != point.id)
             {
                 return NotFound();
             }
@@ -99,12 +106,12 @@ namespace PuntenTeller.Controllers
             {
                 try
                 {
-                    _context.Update(category);
+                    _context.Update(point);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.id))
+                    if (!PointExists(point.id))
                     {
                         return NotFound();
                     }
@@ -115,10 +122,12 @@ namespace PuntenTeller.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            ViewData["examID"] = new SelectList(_context.Exam, "id", "name", point.examID);
+            ViewData["studentID"] = new SelectList(_context.Student, "id", "lastName", point.studentID);
+            return View(point);
         }
 
-        // GET: Categories/Delete/5
+        // GET: Points/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,30 +135,32 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category
+            var point = await _context.Point
+                .Include(p => p.exam)
+                .Include(p => p.student)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (category == null)
+            if (point == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(point);
         }
 
-        // POST: Categories/Delete/5
+        // POST: Points/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.category.FindAsync(id);
-            _context.category.Remove(category);
+            var point = await _context.Point.FindAsync(id);
+            _context.Point.Remove(point);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private bool PointExists(int id)
         {
-            return _context.category.Any(e => e.id == id);
+            return _context.Point.Any(e => e.id == id);
         }
     }
 }

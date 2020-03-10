@@ -16,7 +16,75 @@ namespace PuntenTeller.Models
             SeedData.seedCohort(serviceProvider);
             SeedData.seedCatogory(serviceProvider);
             SeedData.seedSubject(serviceProvider);
+            SeedData.seedSchoolClass(serviceProvider);
+            SeedData.seedStudent(serviceProvider);
+            
         }
+
+        private static void seedSchoolClass(IServiceProvider serviceProvider)
+        {
+            using (var context = new ApplicationDbContext(
+                serviceProvider.GetRequiredService<
+                    DbContextOptions<ApplicationDbContext>>()))
+            {
+                if (context.SchoolClass.Any())
+                {
+                    return;   // DB has been seeded
+                }
+                context.SchoolClass.AddRange(
+                    new SchoolClass
+                    {
+                        name = "1A"
+                    },
+
+                    new SchoolClass
+                    {
+                        name = "2B"
+                    }
+                );
+                context.SaveChanges();
+            }
+        }
+
+        private static void seedStudent(IServiceProvider serviceProvider)
+        {
+            using (var context = new ApplicationDbContext(
+                serviceProvider.GetRequiredService<
+                    DbContextOptions<ApplicationDbContext>>()))
+            {
+                if (context.Student.Any())
+                {
+                    return;   // DB has been seeded
+                }
+                context.Student.AddRange(
+                    new Student
+                    {
+                        id =1,
+                        name = "Adam",
+                        lastName = "de Jong",
+                        schoolClassID = 1
+                    },
+
+                    new Student
+                    {
+                        id=2,
+                        name = "Renske",
+                        lastName = "Hagedoorn",
+                        schoolClassID = 1
+                    },
+
+                    new Student
+                    {
+                        id=3,
+                        name = "Johan",
+                        lastName = "Smits",
+                        schoolClassID = 1
+                    }
+                );
+                context.SaveChanges();
+            }
+        }
+
         private static void seedSubject(IServiceProvider serviceProvider)
         {
             using (var context = new ApplicationDbContext(

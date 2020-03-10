@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PuntenTeller.Models.Teacher>
+﻿@model IEnumerable<PuntenTeller.Models.ClassCourse>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,13 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.name)
+                @Html.DisplayNameFor(model => model.schoolClass)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.lastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.fullName)
+                @Html.DisplayNameFor(model => model.course)
             </th>
             <th></th>
         </tr>
@@ -28,13 +25,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.name)
+                @Html.DisplayFor(modelItem => item.schoolClass.name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.lastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.fullName)
+                @Html.DisplayFor(modelItem => item.course.name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |

@@ -48,7 +48,7 @@ namespace PuntenTeller.Controllers
         // GET: Subjects/Create
         public IActionResult Create()
         {
-            ViewData["categoryID"] = new SelectList(_context.category, "id", "id");
+            ViewData["categoryID"] = new SelectList(_context.category, "id", "name");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace PuntenTeller.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["categoryID"] = new SelectList(_context.category, "id", "id", subject.categoryID);
+            ViewData["categoryID"] = new SelectList(_context.category, "id", "name", subject.categoryID);
             return View(subject);
         }
 
@@ -82,7 +82,7 @@ namespace PuntenTeller.Controllers
             {
                 return NotFound();
             }
-            ViewData["categoryID"] = new SelectList(_context.category, "id", "id", subject.categoryID);
+            ViewData["categoryID"] = new SelectList(_context.category, "id", "name", subject.categoryID);
             return View(subject);
         }
 
@@ -118,7 +118,7 @@ namespace PuntenTeller.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["categoryID"] = new SelectList(_context.category, "id", "id", subject.categoryID);
+            ViewData["categoryID"] = new SelectList(_context.category, "id", "name", subject.categoryID);
             return View(subject);
         }
 

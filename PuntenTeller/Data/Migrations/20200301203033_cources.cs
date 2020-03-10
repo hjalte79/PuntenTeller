@@ -2,12 +2,12 @@
 
 namespace PuntenTeller.Data.Migrations
 {
-    public partial class cource : Migration
+    public partial class cources : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Category",
+                name: "category",
                 columns: table => new
                 {
                     id = table.Column<int>(nullable: false)
@@ -16,7 +16,7 @@ namespace PuntenTeller.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.id);
+                    table.PrimaryKey("PK_category", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -32,9 +32,9 @@ namespace PuntenTeller.Data.Migrations
                 {
                     table.PrimaryKey("PK_Subject", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Subject_Category_categoryID",
+                        name: "FK_Subject_category_categoryID",
                         column: x => x.categoryID,
-                        principalTable: "Category",
+                        principalTable: "category",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -104,7 +104,7 @@ namespace PuntenTeller.Data.Migrations
                 name: "Subject");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "category");
         }
     }
 }

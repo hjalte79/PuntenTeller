@@ -10,22 +10,22 @@ using PuntenTeller.Models;
 
 namespace PuntenTeller.Controllers
 {
-    public class CategoriesController : Controller
+    public class SchoolClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CategoriesController(ApplicationDbContext context)
+        public SchoolClassesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Categories
+        // GET: SchoolClasses
         public async Task<IActionResult> Index()
         {
-            return View(await _context.category.ToListAsync());
+            return View(await _context.SchoolClass.ToListAsync());
         }
 
-        // GET: Categories/Details/5
+        // GET: SchoolClasses/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,41 +33,40 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category
-                .Include(s =>s.subjects)
+            var schoolClass = await _context.SchoolClass
+                .Include(s => s.students)
                 .FirstOrDefaultAsync(m => m.id == id);
-            
-            if (category == null)
+            if (schoolClass == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(schoolClass);
         }
 
-        // GET: Categories/Create
+        // GET: SchoolClasses/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: SchoolClasses/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name")] Category category)
+        public async Task<IActionResult> Create([Bind("id,name")] SchoolClass schoolClass)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                _context.Add(schoolClass);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(schoolClass);
         }
 
-        // GET: Categories/Edit/5
+        // GET: SchoolClasses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,22 +74,22 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category.FindAsync(id);
-            if (category == null)
+            var schoolClass = await _context.SchoolClass.FindAsync(id);
+            if (schoolClass == null)
             {
                 return NotFound();
             }
-            return View(category);
+            return View(schoolClass);
         }
 
-        // POST: Categories/Edit/5
+        // POST: SchoolClasses/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("id,name")] SchoolClass schoolClass)
         {
-            if (id != category.id)
+            if (id != schoolClass.id)
             {
                 return NotFound();
             }
@@ -99,12 +98,12 @@ namespace PuntenTeller.Controllers
             {
                 try
                 {
-                    _context.Update(category);
+                    _context.Update(schoolClass);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.id))
+                    if (!SchoolClassExists(schoolClass.id))
                     {
                         return NotFound();
                     }
@@ -115,10 +114,10 @@ namespace PuntenTeller.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(schoolClass);
         }
 
-        // GET: Categories/Delete/5
+        // GET: SchoolClasses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,30 +125,30 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category
+            var schoolClass = await _context.SchoolClass
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (category == null)
+            if (schoolClass == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(schoolClass);
         }
 
-        // POST: Categories/Delete/5
+        // POST: SchoolClasses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.category.FindAsync(id);
-            _context.category.Remove(category);
+            var schoolClass = await _context.SchoolClass.FindAsync(id);
+            _context.SchoolClass.Remove(schoolClass);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private bool SchoolClassExists(int id)
         {
-            return _context.category.Any(e => e.id == id);
+            return _context.SchoolClass.Any(e => e.id == id);
         }
     }
 }

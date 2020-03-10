@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace PuntenTeller.Models
 {
-    public class Category
+    public class Setting
     {
         public int id { get; set; }
         [Required]
         public string name { get; set; }
-        public ICollection<Subject> subjects { get; set; }
+        [Required]
+        public string value { get; set; }
     }
 }

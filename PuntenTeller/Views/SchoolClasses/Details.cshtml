@@ -1,4 +1,4 @@
-﻿@model PuntenTeller.Models.Category
+﻿@model PuntenTeller.Models.SchoolClass
 
 @{
     ViewData["Title"] = "Details";
@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Category</h4>
+    <h4>SchoolClass</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -19,14 +19,20 @@
     </dl>
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.subjects)
+            @Html.DisplayNameFor(model => model.students)
         </dt>
         <dd class="col-sm-10">
-            @foreach (var item in Model.subjects)
-            {
-                <li>@item.name</li>
-
-            }
+            <ul>
+                @foreach (var item in Model.students)
+                {
+                <li>
+                    <a asp-area="" asp-controller="Students" asp-action="Details" asp-route-id="@item.id">
+                        @item.fullName
+                    </a>
+                </li>
+                }
+            </ul>
+            
         </dd>
     </dl>
 </div>

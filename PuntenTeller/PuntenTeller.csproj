@@ -10,6 +10,8 @@
     <Compile Remove="Data\Migrations\20200222225154_Course.Designer.cs" />
     <Compile Remove="Data\Migrations\20200228210538_Category.cs" />
     <Compile Remove="Data\Migrations\20200228210538_Category.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200228214103_cource.cs" />
+    <Compile Remove="Data\Migrations\20200228214103_cource.Designer.cs" />
   </ItemGroup>
 
 

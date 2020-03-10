@@ -10,22 +10,23 @@ using PuntenTeller.Models;
 
 namespace PuntenTeller.Controllers
 {
-    public class CategoriesController : Controller
+    public class ClassCoursesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CategoriesController(ApplicationDbContext context)
+        public ClassCoursesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Categories
+        // GET: ClassCourses
         public async Task<IActionResult> Index()
         {
-            return View(await _context.category.ToListAsync());
+            var applicationDbContext = _context.ClassCourse.Include(c => c.course).Include(c => c.schoolClass);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Categories/Details/5
+        // GET: ClassCourses/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,41 +34,45 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category
-                .Include(s =>s.subjects)
+            var classCourse = await _context.ClassCourse
+                .Include(c => c.course)
+                .Include(c => c.schoolClass)
                 .FirstOrDefaultAsync(m => m.id == id);
-            
-            if (category == null)
+            if (classCourse == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(classCourse);
         }
 
-        // GET: Categories/Create
+        // GET: ClassCourses/Create
         public IActionResult Create()
         {
+            ViewData["courseID"] = new SelectList(_context.Course, "id", "name");
+            ViewData["schoolClassID"] = new SelectList(_context.SchoolClass, "id", "name");
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: ClassCourses/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name")] Category category)
+        public async Task<IActionResult> Create([Bind("id,schoolClassID,courseID")] ClassCourse classCourse)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                _context.Add(classCourse);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            ViewData["courseID"] = new SelectList(_context.Course, "id", "name", classCourse.courseID);
+            ViewData["schoolClassID"] = new SelectList(_context.SchoolClass, "id", "name", classCourse.schoolClassID);
+            return View(classCourse);
         }
 
-        // GET: Categories/Edit/5
+        // GET: ClassCourses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,22 +80,24 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category.FindAsync(id);
-            if (category == null)
+            var classCourse = await _context.ClassCourse.FindAsync(id);
+            if (classCourse == null)
             {
                 return NotFound();
             }
-            return View(category);
+            ViewData["courseID"] = new SelectList(_context.Course, "id", "name", classCourse.courseID);
+            ViewData["schoolClassID"] = new SelectList(_context.SchoolClass, "id", "name", classCourse.schoolClassID);
+            return View(classCourse);
         }
 
-        // POST: Categories/Edit/5
+        // POST: ClassCourses/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("id,schoolClassID,courseID")] ClassCourse classCourse)
         {
-            if (id != category.id)
+            if (id != classCourse.id)
             {
                 return NotFound();
             }
@@ -99,12 +106,12 @@ namespace PuntenTeller.Controllers
             {
                 try
                 {
-                    _context.Update(category);
+                    _context.Update(classCourse);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.id))
+                    if (!ClassCourseExists(classCourse.id))
                     {
                         return NotFound();
                     }
@@ -115,10 +122,12 @@ namespace PuntenTeller.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            ViewData["courseID"] = new SelectList(_context.Course, "id", "name", classCourse.courseID);
+            ViewData["schoolClassID"] = new SelectList(_context.SchoolClass, "id", "name", classCourse.schoolClassID);
+            return View(classCourse);
         }
 
-        // GET: Categories/Delete/5
+        // GET: ClassCourses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,30 +135,32 @@ namespace PuntenTeller.Controllers
                 return NotFound();
             }
 
-            var category = await _context.category
+            var classCourse = await _context.ClassCourse
+                .Include(c => c.course)
+                .Include(c => c.schoolClass)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (category == null)
+            if (classCourse == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(classCourse);
         }
 
-        // POST: Categories/Delete/5
+        // POST: ClassCourses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.category.FindAsync(id);
-            _context.category.Remove(category);
+            var classCourse = await _context.ClassCourse.FindAsync(id);
+            _context.ClassCourse.Remove(classCourse);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private bool ClassCourseExists(int id)
         {
-            return _context.category.Any(e => e.id == id);
+            return _context.ClassCourse.Any(e => e.id == id);
         }
     }
 }

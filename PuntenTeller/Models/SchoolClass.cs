@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace PuntenTeller.Models
 {
-    public class Category
+    public class SchoolClass
     {
         public int id { get; set; }
         [Required]
         public string name { get; set; }
-        public ICollection<Subject> subjects { get; set; }
+
+        ///// navigation properties /////
+        // known by
+        public ICollection<Student> students { get; set; }
+        public ICollection<ClassCourse> classCourses { get; set; }
     }
 }

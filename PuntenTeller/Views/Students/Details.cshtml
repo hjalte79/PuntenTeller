@@ -1,0 +1,132 @@
+﻿@model PuntenTeller.Models.Student
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Student</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.lastName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.lastName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.schoolClass)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.schoolClass.name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <h4>Raport</h4>
+    <hr />
+
+
+    <table border="1">
+        <thead>
+            <tr>
+                <td style="width: 25%">Name</td>
+                @for (int i = 1; i <= ViewBag.rapport.numberOfPeriods; i++)
+                {
+                    <td style="width: 15%">@i</td>
+                }
+                <td style="width: 15">Resultaat</td>
+            </tr>
+        </thead>
+        @foreach (Category category in ViewBag.rapport.categories)
+        {
+            <tr>
+                <td><b>@category.name</b></td>
+
+            </tr>
+            <tr>
+                @foreach (Subject subject in category.subjects)
+                {
+                    <td>@subject.name</td>
+
+                    @foreach (Course course in subject.Courses)
+                    {
+                        @if (course.getPointForStudent(ViewBag.rapport.student.id) == 0)
+                        {
+                            <td> </td>
+                        }
+                        else
+                        {
+                            <td>@course.getPointForStudent(ViewBag.rapport.student.id)</td>
+                        }
+
+                    }
+                    <td>@subject.getPointForStudent(ViewBag.rapport.student.id)</td>
+                }
+            </tr>
+        }
+    </table>
+
+
+    <ul>
+        @foreach (Category category in ViewBag.rapport.categories)
+        {
+            <li>@category.name
+                <ul>
+                    @foreach (Subject subject in category.subjects)
+                    {
+                        <li>Subject: @subject.name - @subject.getPointForStudent(ViewBag.rapport.student.id)
+                            <ul>
+                                @foreach (Course course in subject.Courses)
+                                {
+                                    @if (string.IsNullOrEmpty(course.name) == false)
+                                    {
+                                        <li>
+                                            Cource: @course.name - @course.getPointForStudent(ViewBag.rapport.student.id)
+                                            <ul>
+                                                @if (course.exams != null)
+                                                {
+                                                    @foreach (Exam exam in course.exams)
+                                                    {
+                                                        <li>
+                                                            Exam: @exam.name - @exam.getPointForStudent(ViewBag.rapport.student.id)
+                                                            <ul>
+                                                                @foreach (Point point in exam.points)
+                                                                {
+                                                                    @if (point.studentID == ViewBag.rapport.student.id)
+                                                                    {
+                                                                        <li>Point: @point.value</li>
+                                                                    }
+
+                                                                }
+                                                            </ul>
+                                                        </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+
+    </ul>
+
+
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

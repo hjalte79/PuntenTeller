@@ -1,4 +1,4 @@
-﻿@model PuntenTeller.Models.Category
+﻿@model PuntenTeller.Models.Exam
 
 @{
     ViewData["Title"] = "Details";
@@ -7,26 +7,20 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Category</h4>
+    <h4>Exam</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.name)
         </dt>
-        <dd class="col-sm-10">
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.name)
         </dd>
-    </dl>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.subjects)
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.course)
         </dt>
-        <dd class="col-sm-10">
-            @foreach (var item in Model.subjects)
-            {
-                <li>@item.name</li>
-
-            }
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.course.name)
         </dd>
     </dl>
 </div>

@@ -20,17 +20,37 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Index">Students</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Studiepunten</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Gebruikers</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Klassen</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="SchoolClasses" asp-action="Index">Klassen</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Instellingen</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Exams" asp-action="Index">Exams</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Instellingen
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Subjects" asp-action="Index">Subjects</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Courses" asp-action="Index">Courses</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Exams" asp-action="Index">Exams</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Points" asp-action="Index">Points</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="" asp-controller="Teachers" asp-action="Index">Teachers</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Cohorts" asp-action="Index">Cohorts</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="ClassCourses" asp-action="Index">ClassCourses</a>
+                            </div>
+                        </li>
+
                     </ul>
                 </div>
             </div>
